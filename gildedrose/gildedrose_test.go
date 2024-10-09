@@ -19,11 +19,12 @@ import (
 // 	}
 // }
 
-func Test_Characterisation_5_Day_Output(t *testing.T) {
-	cmd := exec.Command("go", "run", "../texttest_fixture.go", "5")
+func Test_Characterisation_15_Day_Output(t *testing.T) {
+	cmd := exec.Command("go", "run", "../texttest_fixture.go", "15")
 	actualOutput, _ := cmd.Output()
+	//print(actualOutput)
 
-	expectedOutput, err := os.ReadFile("../expected-5-days-output.txt")
+	expectedOutput, err := os.ReadFile("../expected-15-days-output.txt")
 	if err != nil {
 		t.Fatalf("Failed to read expected output: %v", err)
 	}

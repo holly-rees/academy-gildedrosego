@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
 	"github.com/emilybache/gildedrose-refactoring-kata/gildedrose"
 )
 
