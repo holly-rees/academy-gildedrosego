@@ -26,6 +26,7 @@ func setUpRouter(itemsAPI *api.ItemAPI) *http.ServeMux {
 
 	router.HandleFunc("GET /", rootHandler)
 	router.HandleFunc("GET /api/items", itemsAPI.GetItems)
+	router.HandleFunc("POST /api/items/update", itemsAPI.UpdateItems)
 
 	return router
 }
