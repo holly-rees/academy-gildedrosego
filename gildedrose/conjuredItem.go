@@ -9,7 +9,12 @@ func NewConjuredItem(item *Item) ConjuredItem {
 }
 
 func (conjuredItem ConjuredItem) updateItemQuality() {
-	conjuredItem.item.decreaseQualityOfItemBy(2)
+	switch {
+	case conjuredItem.item.SellIn <= 0:
+		conjuredItem.item.decreaseQualityOfItemBy(4)
+	default:
+		conjuredItem.item.decreaseQualityOfItemBy(2)
+	}
 }
 
 func (conjuredItem ConjuredItem) updateItemSellIn() {
