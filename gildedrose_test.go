@@ -2,6 +2,8 @@ package main
 
 import (
 	"gildedrose/model"
+	"gildedrose/repository"
+	"gildedrose/service"
 	"os"
 	"os/exec"
 	"reflect"
@@ -207,5 +209,67 @@ func Test_Characterisation_15_Day_Output(t *testing.T) {
 
 	if string(actualOutput) != string(expectedOutput) {
 		t.Errorf("Output does not match.\nExpected: %s\nGot: %s", expectedOutput, actualOutput)
+	}
+}
+
+func TestGetItemsFromRepository(t *testing.T) {
+	// Arrange
+	repo := repository.NewInMemoryItemRepository()
+	service := service.NewItemService(*repo)
+	expected := []*model.Item{
+		{Name: "+5 Dexterity Vest", SellIn: 10, Quality: 20},
+		{Name: "Aged Brie", SellIn: 2, Quality: 0},
+		{Name: "Elixir of the Mongoose", SellIn: 5, Quality: 7},
+		{Name: "Sulfuras, Hand of Ragnaros", SellIn: 0, Quality: 80},
+		{Name: "Sulfuras, Hand of Ragnaros", SellIn: -1, Quality: 80},
+		{Name: "Backstage passes to a TAFKAL80ETC concert", SellIn: 15, Quality: 20},
+		{Name: "Backstage passes to a TAFKAL80ETC concert", SellIn: 10, Quality: 49},
+		{Name: "Backstage passes to a TAFKAL80ETC concert", SellIn: 5, Quality: 49},
+		{Name: "Conjured Mana Cake", SellIn: 3, Quality: 6}, // <-- :O
+	}
+
+	// Act
+	got, err := service.GetItems()
+
+	// Assert
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+
+	if !reflect.DeepEqual(expected, got) {
+		t.Errorf("Expected %v, got %v", expected, got)
+	}
+}
+
+func TestUpdateItemsInRepository(t *testing.T) {
+	// Arrange
+	repo := repository.NewInMemoryItemRepository()
+	service := service.NewItemService(*repo)
+	expected := []*model.Item{
+		{Name: "+5 Dexterity Vest", SellIn: 9, Quality: 19},
+		{Name: "Aged Brie", SellIn: 1, Quality: 1},
+		{Name: "Elixir of the Mongoose", SellIn: 4, Quality: 6},
+		{Name: "Sulfuras, Hand of Ragnaros", SellIn: 0, Quality: 80},
+		{Name: "Sulfuras, Hand of Ragnaros", SellIn: -1, Quality: 80},
+		{Name: "Backstage passes to a TAFKAL80ETC concert", SellIn: 14, Quality: 21},
+		{Name: "Backstage passes to a TAFKAL80ETC concert", SellIn: 9, Quality: 50},
+		{Name: "Backstage passes to a TAFKAL80ETC concert", SellIn: 4, Quality: 50},
+		{Name: "Conjured Mana Cake", SellIn: 2, Quality: 4}, // <-- :O
+	}
+
+	// Act
+	err := service.UpdateQuality()
+	if err != nil {
+		t.Errorf("Unexpected error updating items: %v", err)
+	}
+
+	got, err := service.GetItems()
+
+	// Assert
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	if !reflect.DeepEqual(expected, got) {
+		t.Errorf("Expected %v, got %v", expected, got)
 	}
 }
