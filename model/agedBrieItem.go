@@ -1,4 +1,4 @@
-package gildedrose
+package model
 
 type AgedBrieItem struct {
 	item *Item
@@ -9,9 +9,10 @@ func NewAgedBrieItem(item *Item) AgedBrieItem {
 }
 
 func (agedBrie AgedBrieItem) updateItemQuality() {
-	if agedBrie.item.SellIn <= 0 {
+	switch {
+	case agedBrie.item.SellIn <= 0:
 		agedBrie.item.increaseQualityOfItemBy(2)
-	} else {
+	default:
 		agedBrie.item.increaseQualityOfItemBy(1)
 	}
 }

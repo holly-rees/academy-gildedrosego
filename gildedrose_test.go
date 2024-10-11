@@ -1,24 +1,23 @@
-package gildedrose_test
+package main
 
 import (
+	"gildedrose/model"
 	"os"
 	"os/exec"
 	"reflect"
 	"testing"
-
-	"github.com/emilybache/gildedrose-refactoring-kata/gildedrose"
 )
 
 func Test_SulfurasQualityDoesntChange(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*model.Item{
 		{"Sulfuras, Hand of Ragnaros", 0, 80},
 		{"Sulfuras, Hand of Ragnaros", -1, 80},
 	}
 
 	var expectedQuality = []int{80, 80}
 
-	gildedrose.UpdateQuality(items)
-	gildedrose.UpdateQuality(items)
+	UpdateQuality(items)
+	UpdateQuality(items)
 
 	for i, item := range items {
 		if item.Quality != expectedQuality[i] {
@@ -28,18 +27,18 @@ func Test_SulfurasQualityDoesntChange(t *testing.T) {
 }
 
 func Test_SulfurasDoesntChange(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*model.Item{
 		{"Sulfuras, Hand of Ragnaros", 0, 80},
 		{"Sulfuras, Hand of Ragnaros", -1, 80},
 	}
 
-	var expectedItems = []*gildedrose.Item{
+	var expectedItems = []*model.Item{
 		{"Sulfuras, Hand of Ragnaros", 0, 80},
 		{"Sulfuras, Hand of Ragnaros", -1, 80},
 	}
 
-	gildedrose.UpdateQuality(items)
-	gildedrose.UpdateQuality(items)
+	UpdateQuality(items)
+	UpdateQuality(items)
 
 	if !reflect.DeepEqual(items, expectedItems) {
 		t.Errorf("Items not equal. For first item SellIn: got %v, expected %v", items[0].SellIn, expectedItems[0].SellIn)
@@ -48,16 +47,16 @@ func Test_SulfurasDoesntChange(t *testing.T) {
 }
 
 func Test_BackstagePassQualityIncreaseBy1Before11DaySellIn(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*model.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 15, 20},
 	}
 
-	var expectedItems = []*gildedrose.Item{
+	var expectedItems = []*model.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 13, 22},
 	}
 
-	gildedrose.UpdateQuality(items)
-	gildedrose.UpdateQuality(items)
+	UpdateQuality(items)
+	UpdateQuality(items)
 
 	if !reflect.DeepEqual(items, expectedItems) {
 		t.Errorf("Items not equal. For first item quality: got %v, expected %v", items[0].Quality, expectedItems[0].Quality)
@@ -66,17 +65,17 @@ func Test_BackstagePassQualityIncreaseBy1Before11DaySellIn(t *testing.T) {
 }
 
 func Test_BackstagePassQualityIncreaseBy2After11DaySellIn(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*model.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 12, 20},
 	}
 
-	var expectedItems = []*gildedrose.Item{
+	var expectedItems = []*model.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 9, 24},
 	}
 
-	gildedrose.UpdateQuality(items)
-	gildedrose.UpdateQuality(items)
-	gildedrose.UpdateQuality(items)
+	UpdateQuality(items)
+	UpdateQuality(items)
+	UpdateQuality(items)
 
 	if !reflect.DeepEqual(items, expectedItems) {
 		t.Errorf("Items not equal. For first item quality: got %v, expected %v", items[0].Quality, expectedItems[0].Quality)
@@ -85,16 +84,16 @@ func Test_BackstagePassQualityIncreaseBy2After11DaySellIn(t *testing.T) {
 }
 
 func Test_BackstagePassQualityIncreaseBy3After6DaySellIn(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*model.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 12, 23},
 	}
 
-	var expectedItems = []*gildedrose.Item{
+	var expectedItems = []*model.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 4, 38},
 	}
 
 	for i := 0; i < 8; i++ {
-		gildedrose.UpdateQuality(items)
+		UpdateQuality(items)
 	}
 
 	if !reflect.DeepEqual(items, expectedItems) {
@@ -104,16 +103,16 @@ func Test_BackstagePassQualityIncreaseBy3After6DaySellIn(t *testing.T) {
 }
 
 func Test_AgedBrieQuality(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*model.Item{
 		{"Aged Brie", 2, 0},
 	}
 
-	var expectedItems = []*gildedrose.Item{
+	var expectedItems = []*model.Item{
 		{"Aged Brie", -2, 6},
 	}
 
 	for i := 0; i < 4; i++ {
-		gildedrose.UpdateQuality(items)
+		UpdateQuality(items)
 	}
 
 	if !reflect.DeepEqual(items, expectedItems) {
@@ -122,17 +121,17 @@ func Test_AgedBrieQuality(t *testing.T) {
 }
 
 func Test_StandardItemsQuality(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*model.Item{
 		{"+5 Dexterity Vest", 10, 20},
 		{"Elixir of the Mongoose", 5, 7},
 	}
-	var expectedItems = []*gildedrose.Item{
+	var expectedItems = []*model.Item{
 		{"+5 Dexterity Vest", -2, 6},
 		{"Elixir of the Mongoose", -7, 0},
 	}
 
 	for i := 0; i < 12; i++ {
-		gildedrose.UpdateQuality(items)
+		UpdateQuality(items)
 	}
 
 	if !reflect.DeepEqual(items, expectedItems) {
@@ -141,7 +140,7 @@ func Test_StandardItemsQuality(t *testing.T) {
 }
 
 func Test_SellInDecreases(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*model.Item{
 		{"+5 Dexterity Vest", 10, 20},
 		{"Aged Brie", 2, 0},
 		{"Elixir of the Mongoose", 5, 7},
@@ -164,7 +163,7 @@ func Test_SellInDecreases(t *testing.T) {
 	}
 
 	for i := 0; i < 13; i++ {
-		gildedrose.UpdateQuality(items)
+		UpdateQuality(items)
 	}
 
 	for i, item := range items {
@@ -175,18 +174,18 @@ func Test_SellInDecreases(t *testing.T) {
 }
 
 func Test_ConjuredItemsQuality(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*model.Item{
 		{"Conjured Mana Cake", 3, 6},
 		{"Conjured Mana Cake", 5, 10},
 	}
 
-	var expectedItems = []*gildedrose.Item{
+	var expectedItems = []*model.Item{
 		{"Conjured Mana Cake", 0, 0},
 		{"Conjured Mana Cake", 2, 4},
 	}
 
 	for i := 0; i < 3; i++ {
-		gildedrose.UpdateQuality(items)
+		UpdateQuality(items)
 	}
 
 	if !reflect.DeepEqual(items, expectedItems) {

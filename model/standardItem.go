@@ -1,4 +1,4 @@
-package gildedrose
+package model
 
 type StandardItem struct {
 	item *Item
