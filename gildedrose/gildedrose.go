@@ -1,5 +1,7 @@
 package gildedrose
 
+import "strings"
+
 type Item struct {
 	Name            string
 	SellIn, Quality int
@@ -32,7 +34,7 @@ func UpdateQuality(items []*Item) {
 
 func GildedItemFactory(item *Item) GildedItem {
 	switch {
-	case item.Name == "Backstage passes to a TAFKAL80ETC concert":
+	case strings.Contains(item.Name, "Backstage pass"):
 		return NewBackstagePassItem(item)
 
 	case item.Name == "Sulfuras, Hand of Ragnaros":
@@ -41,7 +43,7 @@ func GildedItemFactory(item *Item) GildedItem {
 	case item.Name == "Aged Brie":
 		return NewAgedBrieItem(item)
 
-	case item.Name == "Conjured Mana Cake":
+	case strings.Contains(item.Name, "Conjured"):
 		return NewConjuredItem(item)
 
 	default:
