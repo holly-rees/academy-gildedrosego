@@ -12,11 +12,6 @@ func (sulfuras SulfurasItem) updateItemQuality() {
 	sulfuras.item.Quality = 80
 }
 
-func (sulfuras SulfurasItem) updateItemSellIn() {
-
-}
-
 func (sulfuras SulfurasItem) Update() {
 	sulfuras.updateItemQuality()
-	sulfuras.updateItemSellIn()
 }
