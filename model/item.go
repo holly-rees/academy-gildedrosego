@@ -1,8 +1,9 @@
 package model
 
 type Item struct {
-	Name            string
-	SellIn, Quality int
+	Name    string `json:"name"`
+	SellIn  int    `json:"sellin"`
+	Quality int    `json:"quality"`
 }
 
 var maxQualityValue int = 50
