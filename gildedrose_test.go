@@ -229,9 +229,13 @@ func TestGetItemsFromRepository(t *testing.T) {
 	}
 
 	// Act
-	got := service.GetItems()
+	got, err := service.GetItems()
 
 	// Assert
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+
 	if !reflect.DeepEqual(expected, got) {
 		t.Errorf("Expected %v, got %v", expected, got)
 	}
@@ -254,10 +258,17 @@ func TestUpdateItemsInRepository(t *testing.T) {
 	}
 
 	// Act
-	service.UpdateQuality()
-	got := service.GetItems()
+	err := service.UpdateQuality()
+	if err != nil {
+		t.Errorf("Unexpected error updating items: %v", err)
+	}
+
+	got, err := service.GetItems()
 
 	// Assert
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
 	if !reflect.DeepEqual(expected, got) {
 		t.Errorf("Expected %v, got %v", expected, got)
 	}

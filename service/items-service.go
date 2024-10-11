@@ -35,16 +35,26 @@ func GildedItemFactory(item *model.Item) model.GildedItem {
 	}
 }
 
-func (s *ItemService) GetItems() []*model.Item {
-	return s.repository.GetItems()
+func (s *ItemService) GetItems() ([]*model.Item, error) {
+	items, err := s.repository.GetItems()
+	if err != nil {
+		return []*model.Item{}, err
+	}
+	return items, nil
 }
 
-func (s *ItemService) UpdateQuality() {
+func (s *ItemService) UpdateQuality() error {
+	items, err := s.GetItems()
+	if err != nil {
+		return err
+	}
 
-	for _, item := range s.repository.GetItems() {
+	for _, item := range items {
 
 		gildedItem := GildedItemFactory(item)
 		gildedItem.Update()
 
 	}
+
+	return nil
 }

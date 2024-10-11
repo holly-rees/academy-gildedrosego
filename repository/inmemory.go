@@ -27,6 +27,6 @@ func InitDB() {
 	}
 }
 
-func (repo *InMemoryItemRepository) GetItems() []*model.Item {
-	return items
+func (repo *InMemoryItemRepository) GetItems() ([]*model.Item, error) {
+	return items, nil
 }
