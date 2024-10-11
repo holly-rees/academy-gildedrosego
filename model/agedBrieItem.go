@@ -1,4 +1,4 @@
-package gildedrose
+package model
 
 type AgedBrieItem struct {
 	item *Item

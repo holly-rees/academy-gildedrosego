@@ -1,4 +1,4 @@
-package gildedrose
+package model
 
 type ConjuredItem struct {
 	item *Item
